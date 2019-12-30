@@ -1,0 +1,672 @@
+
+
+
+<?php
+session_start();
+?>
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">  
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+  <script src="jquery.ui.touch-punch.min.js"></script>
+  
+  <title>Mellodrama</title>
+</head>
+<body>
+<p align="right">Kod av Ola Wistedt</p>
+<?php
+	require 'mello_db.php';
+	$melloDb = new MelloDB();
+
+//	print_r($_POST);
+//	print_r($_SESSION);
+
+//	if( empty($_SESSION["current_sub_contest"]) ) {
+//		echo "Du måste välja en tävling att delta i först";
+//	}
+	
+	if($_SERVER["REQUEST_METHOD"] == "POST") {
+		
+		if($_POST["action"] == "register") {
+			$user_id = $melloDb->get_user_id($_POST["first_name"], $_POST["last_name"]);
+			if( $user_id == 0 ) {
+				$melloDb->add_user($_POST["first_name"], $_POST["last_name"]);
+				$user_id = $melloDb->get_user_id($_POST["first_name"], $_POST["last_name"]);
+				//echo "Användar ID = " . strval($user_id);
+				$_SESSION["user_id"] = $user_id;
+				$_SESSION["first_name"] = $_POST["first_name"];
+				$_SESSION["last_name"] = $_POST["last_name"];
+			}
+		}
+		elseif($_POST["action"] == "logout") {
+			session_unset();
+			session_destroy();
+		}
+		elseif($_POST["action"] == "login") {
+			// Get user id from users database
+			
+			$user_id = $melloDb->get_user_id($_POST["first_name"], $_POST["last_name"]);		
+			// echo "Användar ID = " . strval($user_id);
+			if( $user_id != 0 ) {
+				$_SESSION["user_id"] = $user_id;
+				$_SESSION["first_name"] = $_POST["first_name"];
+				$_SESSION["last_name"] = $_POST["last_name"];
+			}
+			else {
+				// Maybe add a new user.
+				echo "Du måste registrera dig innan din första inloggning<br>";
+			}
+		}
+	
+		elseif($_POST["action"] == "set_sub_contest") {
+			$_SESSION["current_sub_contest"] = $_POST["subcontest"];
+			
+			if( !empty($_SESSION["first_name"] AND $_SESSION["current_sub_contest"] != "none") ) {
+				$user_id = $melloDb->get_user_id($_SESSION["first_name"], $_SESSION["last_name"]);
+				if( $user_id == 0 ) {
+					echo "Du måste logga in först";
+				}
+				else {
+					// Look if the user has guessed before
+					$guesses = $melloDb->get_guesses_for_id($_SESSION["current_sub_contest"], $user_id);
+					if( $guesses == 0 ) {
+						// Create a new table entry for this user.
+						$melloDb->add_user_to_competition($_SESSION["current_sub_contest"], $user_id);
+
+						// Add initial guesses for the user 1..n
+						$arr = $melloDb->get_melodies($_SESSION["current_sub_contest"]);
+						$new_guesses = array();
+						for ($i = 1; $i <= count($arr); $i++) {
+							$new_guesses[] = $i;
+						}
+						$melloDb->set_guesses_for_id($user_id, $_SESSION["current_sub_contest"], $new_guesses);
+					}
+				}
+			}
+		}
+	}
+
+	//	if($_POST["action"] == "update_guesses") {
+//		$melloDb->update_guesses($_SESSION["current_sub_contest"]);
+//	}
+	
+	
+?>
+
+
+
+
+
+<!-- ======================================================== -->
+<!-- ======================================================== -->
+<!-- ======================================================== -->
+<!-- ======================================================== -->
+<!-- ======================================================== -->
+<!-- ======================================================== -->
+<!-- ======================================================== -->
+<!-- ======================================================== -->
+
+
+<H1 align="center">Mellodrama</H1>
+
+
+
+
+<!-- ======================================================== -->
+<!-- Login session -->
+<!-- ======================================================== -->
+<div class="container" <?php if( !empty($_SESSION["first_name"]) ) {echo "hidden";} ?>>
+<form action="" method="post">
+<table class="table table-bordered">
+  <tbody>
+    <tr>
+      <td>Förnamn</td><td><input type="text" name="first_name" value=""></td>
+    </tr>
+    <tr>
+      <td>Efternamn</td><td><input type="text" name="last_name" value=""></td>
+    </tr>
+  </tbody>
+</table>
+<button class="btn btn-default" type="submit" name="action" value="login">Logga in</button>
+<button class="btn btn-default" type="submit" name="action" value="register">Registrera</button>
+</form>
+<br>
+<p>Om första gången, skriv in dina uppgifter och tryck registrera. Annars skriv in dina uppgifter och tryck logga in.</p>
+<br>
+<p>Vinnare år för år (poängräkningen har skiljt sig vissa år så det är inte jämförbara)</p>
+<table class="table">
+  <tbody>
+	<tr>
+		  <td>2019</td><td>Johan Lindström</td><td>60 poäng</td>
+		</tr>
+	  <tr>
+  		<td>2018</td><td>Martin Samuelsson</td><td>70 poäng</td>
+		</tr>
+	  <tr>
+		  <td>2017</td><td>Lars Nyström</td><td>61 poäng</td>
+		</tr>
+	  <tr>
+		  <td>2016</td><td>Ewa Pettersson</td><td>63 poäng</td>
+		</tr>
+	  <tr>
+		  <td>2015</td><td>Lars Nyström</td><td>55 poäng</td>
+		</tr>		
+	  <tr>
+		  <td>2014</td><td>Sandra Lindvall</td><td>59 poäng</td>
+		</tr>		
+	  <tr>
+		  <td>2014</td><td>Sandra Lindvall</td><td>68 poäng</td>
+		</tr>		
+		<tr>
+		  <td>2012</td><td>Johan Lindström</td><td>57 poäng</td>
+		</tr>
+	  <tr>
+		  <td>2011</td><td>Sandra Lindvall</td><td>50 poäng</td>
+		</tr>		
+	  <tr>
+			<td>2010</td><td>Martin Samuelsson</td><td>44 poäng</td></b>
+		</tr>
+</table>
+
+</div>
+
+
+<!-- ======================================================== -->
+<!-- Logout session -->
+<!-- ======================================================== -->
+<div class="container" <?php if( empty($_SESSION["first_name"]) ) {echo "hidden";} ?>>
+<p>
+<?php
+if( !empty($_SESSION["first_name"]) ) {
+  echo "Du är inloggad som "; echo $_SESSION["first_name"]; echo " "; echo $_SESSION["last_name"];
+}
+?>
+<form action="" method="post">
+<button class="btn btn-default" type="submit" name="action" value="logout">Logga ut</button>
+</form>
+</p>
+</div>
+
+
+
+<!-- ======================================================== -->
+<!-- Dropdown menu that chooses sub contest to participate in -->
+<!-- ======================================================== -->
+<div class="container" <?php if( empty($_SESSION["first_name"]) ) {echo "hidden";} ?>>
+
+<form action="" method="post">
+<select name="subcontest">
+<option value="none" selected>Välj Deltävling/Final</option>
+<?php
+	$arr = $melloDb->get_sub_contests();
+	for ($i = 0; $i < count($arr); $i++) {
+		if( $arr[$i] != "Final_2015" &&
+			$arr[$i] != "final_2016" &&
+			$arr[$i] != "deltavling_1_2018" &&
+			$arr[$i] != "deltavling_2_2018" &&
+			$arr[$i] != "deltavling_3_2018" &&
+			$arr[$i] != "deltavling_4_2018" &&
+			$arr[$i] != "andra_chansen_2018" &&
+			$arr[$i] != "final_2018"		&&
+			$arr[$i] != "deltavling_1_2017" &&
+			$arr[$i] != "deltavling_2_2017" &&
+			$arr[$i] != "deltavling_3_2017" &&
+			$arr[$i] != "deltavling_4_2017" &&
+			$arr[$i] != "eurovision_2016" &&
+			$arr[$i] != "andra_chansen_2017" &&
+			$arr[$i] != "final_2017"							
+				) {
+			if( $arr[$i] == $_SESSION["current_sub_contest"] ) {
+				echo "<option value=\"$arr[$i]\" selected>$arr[$i]</option>";
+			}
+			else {
+				echo "<option value=\"$arr[$i]\">$arr[$i]</option>";
+			}
+		}
+	}
+?>
+</select>
+<button class="btn btn-default" type="submit" name="action" value="set_sub_contest">Delta</button>
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+<!-- ======================================================== -->
+<!-- Sortable table with melodies and results -->
+<!-- ======================================================== -->
+<div class="container" <?php if( empty($_SESSION["current_sub_contest"]) ) {echo "hidden";} ?>>
+<script>
+</script>	
+<script>
+$(document).ready(function () {
+
+	var is_locked = "1";
+
+	function check_lock() {
+		 $.getJSON("mello_ajax_server.php",
+	        		{ action: "is_locked", subcontest: <?php echo "\""; echo $_SESSION["current_sub_contest"]; echo "\""; ?> },
+	                 function(result){
+	        			is_locked = result;
+	        			if(is_locked == "0") {
+	            			$("#open_or_closed").text("");
+	        			}
+	        			else {
+	            			$("#open_or_closed").text("Tippningen är stängd");
+	        			}
+	        		}); 
+	}
+
+	check_lock();
+	setInterval(function(){ check_lock(); }, 30000); // Check every thirty seconds. 
+
+	
+    $('#sortable').sortable({
+        axis: 'y',
+        stop: function (event, ui) {
+	       	if( is_locked === "1" ) {
+            	$(this).sortable('cancel');
+        	}
+        	else
+        	{        	
+		        var data = "action=rearrange&";
+		        data += "user_id=<?php echo $_SESSION["user_id"]?>&";
+		        data += "subcontest=<?php echo $_SESSION["current_sub_contest"]?>&";
+		        data += $(this).sortable('serialize');
+	            $.ajax({
+	                data: data,
+	                type: 'POST',
+	                url: 'mello_ajax_server.php'
+	            });
+        	}
+        }
+    });
+});
+</script>
+
+<p style="color:red;" id="open_or_closed"></p>
+<p>Du kan ändra din tippning fram till strax innan resultaten redovisas på tv.</p> 
+<table class="table">
+<td>
+<ul class="list-group">
+<?php
+    if( !empty($_SESSION["current_sub_contest"]) AND $_SESSION["current_sub_contest"] != "none") {
+    	$count_system = $melloDb->get_count_system($_SESSION["current_sub_contest"]);
+		for ($i = 1; $i <= count($melloDb->get_melodies($_SESSION["current_sub_contest"])); $i++) {
+			if( $count_system == "deltavling" AND ($i == 1 OR $i == 2) ) {
+				echo "<li class=\"list-group-item\">Direkt<br>---</li>";				
+			}
+			elseif( $count_system == "deltavling" AND ($i == 3 OR $i == 4) ) {
+				echo "<li class=\"list-group-item\">2:a chansen<br>---</li>";
+			}
+			elseif( $count_system == "andra_chansen" AND ($i >= 1 AND $i <= 4) ) {
+				echo "<li class=\"list-group-item\">Till final<br>---</li>";
+			}
+			elseif( $count_system == "andra_chansen" AND ($i >= 5 AND $i <= 8) ) {
+				echo "<li class=\"list-group-item\">Åker ur<br>---</li>";
+			}
+			else {
+				echo "<li class=\"list-group-item\">$i<br>---</li>";
+			}
+		}
+    }
+?>
+</ul>
+</td>
+<td>
+<ul class="list-group" id="sortable">
+<?php
+    if( !empty($_SESSION["current_sub_contest"]) AND $_SESSION["current_sub_contest"] != "none") {
+    	$arrMelodies = $melloDb->get_melodies($_SESSION["current_sub_contest"]);
+		$guesses = $melloDb->get_guesses_for_id($_SESSION["current_sub_contest"], $_SESSION["user_id"]);
+		
+		// Get an ordered list sorted by guess
+		array_shift($guesses); // Throw first element (user id)
+		foreach ( $guesses as $guess_for_melody_nr ) {
+			$melody_nr = $arrMelodies[$guess_for_melody_nr - 1][0];
+			$artist = $arrMelodies[$guess_for_melody_nr - 1][1];
+			$melody = $arrMelodies[$guess_for_melody_nr - 1][2];
+			echo "<li class=\"list-group-item\" id=\"item-$guess_for_melody_nr\">$artist<br><i>$melody</i></li>";
+		}
+	}
+	?>
+</ul>
+</td>
+</table>
+<!-- Query string: <span></span> -->
+
+<!-- ======================================================== -->
+<!-- Sortable table with melodies and results -->
+<!-- ======================================================== -->
+
+<?php
+	// Count result with the final count system
+	function count_result_final_system($melloDb, $sub_contest, $user_id) {
+		$sum = 0;
+		// Loop results
+		
+		$arrMelodies = $melloDb->get_melodies($sub_contest);
+		$guesses = $melloDb->get_guesses_for_id($sub_contest, $user_id);
+		if($guesses == 0) {
+			return 0;
+		}
+		array_shift($guesses); // First element is id, throw it!
+	
+		$i = 1;
+		foreach ($arrMelodies as $melody) {
+			$correct_result = $melody[3];
+			$my_guess = array_search($i, $guesses) + 1; // Find melody guess in guesses
+			if($my_guess == $correct_result)
+			{
+				$sum += 2;
+				if($my_guess == 1) {
+					$sum += 1; // Extra bonus for first place correct
+				}
+			}
+			elseif ($my_guess == $correct_result - 1) {
+				$sum += 1;
+			}
+			elseif ($my_guess == $correct_result + 1 AND $my_guess != 1) {
+				$sum += 1;
+			}
+			$i++;
+		}
+		return $sum;
+	}
+	
+	// Count result with the eurovision count system
+	function count_result_eurovision_system($melloDb, $sub_contest, $user_id) {
+		$sum = 0;
+		// Loop results
+	
+		$arrMelodies = $melloDb->get_melodies($sub_contest);
+		$guesses = $melloDb->get_guesses_for_id($sub_contest, $user_id);
+		if($guesses == 0) {
+			return 0;
+		}
+		array_shift($guesses); // First element is id, throw it!
+	
+		$i = 1;
+		foreach ($arrMelodies as $melody) {
+			$correct_result = $melody[3];
+			$my_guess = array_search($i, $guesses) + 1; // Find melody guess in guesses
+			if($my_guess == $correct_result)
+			{
+				$sum += 3;
+				if($my_guess == 1) {
+					$sum += 2; // Extra bonus for first place correct
+				}
+			}
+			elseif ($my_guess == $correct_result - 1) {
+				$sum += 2;
+			}
+			elseif ($my_guess == $correct_result + 1 AND $my_guess != 1) {
+				$sum += 2;
+			}
+			elseif ($my_guess == $correct_result - 2) {
+				$sum += 1;
+			}
+			elseif ($my_guess == $correct_result + 2 AND $my_guess != 1) {
+				$sum += 2;
+			}
+			$i++;
+		}
+		return $sum;
+	}
+
+	// Count result with the deltavling count system
+	function count_result_deltavling_system($melloDb, $sub_contest, $user_id) {
+		$sum = 0;
+		// Loop results
+	
+		$arrMelodies = $melloDb->get_melodies($sub_contest);
+		$guesses = $melloDb->get_guesses_for_id($sub_contest, $user_id);
+		if($guesses == 0) {
+			return 0;
+		}
+		array_shift($guesses); // First element is id, throw it!
+	
+		$i = 1;
+		foreach ($arrMelodies as $melody) {
+			$correct_result = $melody[3];
+			$my_guess = array_search($i, $guesses) + 1; // Find melody guess in guesses
+			
+			if ( $my_guess == 1 AND $correct_result == 1) {
+				$sum += 3;
+			}
+			elseif ( $my_guess == 2 AND $correct_result == 1) {
+				$sum += 3;
+			}
+			elseif ( $my_guess == 2 AND $correct_result == 2) {
+				$sum += 1;
+			}
+			elseif ( $my_guess == 1 AND $correct_result == 2) {
+				$sum += 1;
+			}
+				
+			elseif ( $my_guess == 1 AND $correct_result == 3) {
+				$sum += 1;
+			}
+			elseif ( $my_guess == 1 AND $correct_result == 4) {
+				$sum += 1;
+			}
+			elseif ( $my_guess == 2 AND $correct_result == 3) {
+				$sum += 1;
+			}
+			elseif ( $my_guess == 2 AND $correct_result == 4) {
+				$sum += 1;
+			}
+				
+			// Second chance
+			elseif ( $my_guess == 3 AND $correct_result == 1 ) {
+				$sum += 1;
+			}
+			elseif ( $my_guess == 4 AND $correct_result == 1 ) {
+				$sum += 1;
+			}
+			elseif ( $my_guess == 3 AND $correct_result == 5 ) {
+				$sum += 1;
+			}
+			elseif ( $my_guess == 4 AND $correct_result == 5 ) {
+				$sum += 1;
+			}
+			elseif ( $my_guess == 3 AND $correct_result == 2 ) {
+				$sum += 2;
+			}
+			elseif ( $my_guess == 4 AND $correct_result == 2 ) {
+				$sum += 2;
+			}
+				
+			// Place 5
+			elseif ( $my_guess == 5 AND $correct_result == 2 ) {
+				$sum += 1;
+			}
+			
+			// General cases
+			elseif ($my_guess == $correct_result - 1) {
+				$sum += 1;
+			}
+			elseif ($my_guess == $correct_result + 1 AND $my_guess != 1) {
+				$sum += 1;
+			}
+			elseif($my_guess == $correct_result)
+			{
+				$sum += 2;
+			}
+				
+			$i++;
+		}
+		return $sum;
+	}
+	
+	// Count result with the final count system
+	function count_result_andra_chansen_system($melloDb, $sub_contest, $user_id) {
+		$sum = 0;
+		// Loop results
+		
+		$arrMelodies = $melloDb->get_melodies($sub_contest);
+		$guesses = $melloDb->get_guesses_for_id($sub_contest, $user_id);
+		if($guesses == 0) {
+			return 0;
+		}
+		array_shift($guesses); // First element is id, throw it!
+	
+		$i = 1;
+		foreach ($arrMelodies as $melody) {
+			$correct_result = $melody[3];
+			$my_guess = array_search($i, $guesses) + 1; // Find melody guess in guesses
+			
+
+			if ( $my_guess == 1 AND $correct_result == 1) {
+				$sum += 2;
+			}
+			elseif ( $my_guess == 2 AND $correct_result == 1) {
+				$sum += 2;
+			}
+			elseif ( $my_guess == 3 AND $correct_result == 1) {
+				$sum += 2;
+			}
+			elseif ( $my_guess == 4 AND $correct_result == 1) {
+				$sum += 2;
+			}
+			
+			$i++;
+		}
+		return $sum;
+	}
+	
+	// Count result
+	function count_result($melloDb, $sub_contest, $user_id) {
+		$count_system = $melloDb->get_count_system($sub_contest);
+		if($count_system == "final") {
+			$sum = count_result_final_system($melloDb, $sub_contest, $user_id);
+		}
+		elseif ($count_system == "eurovision") {
+			$sum = count_result_eurovision_system($melloDb, $sub_contest, $user_id);
+		}
+		elseif ($count_system == "deltavling") {
+			$sum = count_result_deltavling_system($melloDb, $sub_contest, $user_id);
+		}
+		elseif ($count_system == "andra_chansen") {
+			$sum = count_result_andra_chansen_system($melloDb, $sub_contest, $user_id);
+		}
+		
+		return $sum;
+	}
+		
+	?>
+
+<h2>Tippningstabell</h2>
+<?php
+if( !empty($_SESSION["current_sub_contest"]) AND $_SESSION["current_sub_contest"] != "none") {
+    $count_system = $melloDb->get_count_system($_SESSION["current_sub_contest"]);
+	if($count_system == "final") {
+		echo "<p>Rätt placering ger 2 poäng, en placering ifrån ger 1 poäng. 1 bonuspoäng för rätt förstaplacering. Max poäng är 25.</p>";			
+	}
+	elseif ($count_system == "eurovision") {
+		echo "<p>Rätt placering ger 3 poäng, en placering ifrån ger 2 poäng, två placeringar ifrån ger 1 poäng. 2 bonuspoäng för rätt förstaplacering. Max poäng är 80.</p>";			
+	}
+	elseif ($count_system == "deltavling") {
+		echo "<p>Rätt placering ger 2 poäng, en placering ifrån ger 1 poäng. 1 bonuspoäng för rätt direkt till final. Max poäng är 16.</p>";
+	}
+	elseif ($count_system == "andra_chansen") {
+		echo "<p>Rätt gissning till final ger 2 poäng. Max poäng är 8.</p><p>Observera!! Förmodligen kommer SVT att redovisa resultaten duell för duell. Pga detta finns det inget bra sätt att låsa tippningen på. För att lösa detta på bästa sätt kommer låsningen att ske redan efter första duellen, så se till att ha tippat klart vid det laget.</p>";
+	}
+}
+?>
+
+<table class="table table-bordered">
+<tbody>
+<?php
+if( !empty($_SESSION["current_sub_contest"]) AND $_SESSION["current_sub_contest"] != "none") {
+	$arrCompeditors = $melloDb->get_compeditors($_SESSION["current_sub_contest"]);
+
+	$arr = array();
+	foreach ($arrCompeditors as $compeditor) {
+		$id = array_shift($compeditor);		
+		$sum = count_result($melloDb, $_SESSION["current_sub_contest"], $id);		
+		$arr[$id] = $sum;
+	}
+	arsort($arr);
+	foreach ($arr as $kid => $epoints) {
+		echo "<tr>";
+		$arrUser = $melloDb->get_user_with_id($kid);
+		echo "<td>$arrUser[0] $arrUser[1]</td>";
+		echo "<td>$epoints</td>";
+		echo "</tr>";
+	}
+}
+?>
+</tbody>
+</table>
+<form action="" method="post">
+<button class="btn btn-default" type="submit" name="action" value="update">Uppdatera</button>
+</form>
+<p>Dina gissningar uppdateras automatiskt när du drar och släpper men den här tippningstabellen uppdateras inte automatiskt. Så tryck uppdatera när röstningen på TV är avslutad.</p>
+
+<h2>Maratontabell</h2>
+
+<table class="table table-bordered">
+<tbody>
+<?php
+if( !empty($_SESSION["current_sub_contest"]) AND $_SESSION["current_sub_contest"] != "none") {
+	
+	$arrParts = array(
+			"final_2019",
+			"andra_chansen_2019",
+			"deltavling_1_2019",
+      "deltavling_2_2019",
+			"deltavling_3_2019",
+			"deltavling_4_2019");
+
+$arrCompeditors = array();
+	foreach ($arrParts as $part) {
+	    $arrCompeditors = array_merge($arrCompeditors, $melloDb->get_compeditors($part));
+	}
+
+	$arr = array();
+	foreach ($arrCompeditors as $compeditor) {
+		$id = array_shift($compeditor);		
+		$sum = 0;	
+		foreach ($arrParts as $part) {
+			$sum += count_result($melloDb, $part, $id);
+		}		
+		$arr[$id] = $sum;
+	}
+	arsort($arr);
+	foreach ($arr as $kid => $epoints) {
+		echo "<tr>";
+		$arrUser = $melloDb->get_user_with_id($kid);
+		echo "<td>$arrUser[0] $arrUser[1]</td>";
+		echo "<td>$epoints</td>";
+		echo "</tr>";
+	}
+}
+?>
+</tbody>
+</table>
+
+</div>
+</body>
+</html>
