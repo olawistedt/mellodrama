@@ -98,6 +98,7 @@ Lägg till deltävling:<br>
 </form>
  -->
  
+<h2>Nytt år</h2>
 
 <h2>Ny deltävling</h2>
 <form action="admin.php" method="post">
