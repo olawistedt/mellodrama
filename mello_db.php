@@ -1,9 +1,9 @@
 <?php
 
-#$servername = "witech.se.mysql";
-#$username = "witech_se";
-#$password = "34H26SzT";
-#$dbname = "witech_se";
+$servername = "witech.se.mysql";
+$username = "witech_se";
+$password = "34H26SzT";
+$dbname = "witech_se";
 
 $servername = "localhost";
 $username = "root";

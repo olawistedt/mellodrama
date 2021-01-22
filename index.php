@@ -1,6 +1,3 @@
-
-
-
 <?php
 session_start();
 ?>
@@ -8,11 +5,14 @@ session_start();
 <html>
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">  
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+  <!-- To get button to work -->
   <script src="jquery.ui.touch-punch.min.js"></script>
   
   <title>Mellodrama</title>
@@ -62,9 +62,8 @@ session_start();
 				echo "Du måste registrera dig innan din första inloggning<br>";
 			}
 		}
-	
-		elseif($_POST["action"] == "set_sub_contest") {
-			$_SESSION["current_sub_contest"] = $_POST["subcontest"];
+		elseif(preg_match('/set_sub_contest=(.*)/', $_POST["action"], $matches) == 1) {
+			$_SESSION["current_sub_contest"] = $matches[1];
 			
 			if( !empty($_SESSION["first_name"] AND $_SESSION["current_sub_contest"] != "none") ) {
 				$user_id = $melloDb->get_user_id($_SESSION["first_name"], $_SESSION["last_name"]);
@@ -112,7 +111,8 @@ session_start();
 <!-- ======================================================== -->
 
 
-<H1 align="center">Mellodrama</H1>
+<!-- <H1 align="center">Mellodrama</H1> -->
+<center><img id="img_mellodrama" src="Mellodrama.png" style="width:100%;height:auto;"></center>
 
 
 
@@ -132,8 +132,8 @@ session_start();
     </tr>
   </tbody>
 </table>
-<button class="btn btn-default" type="submit" name="action" value="login">Logga in</button>
-<button class="btn btn-default" type="submit" name="action" value="register">Registrera</button>
+<button class="btn btn-secondary" type="submit" name="action" value="login">Logga in</button>
+<button class="btn btn-secondary" type="submit" name="action" value="register">Registrera</button>
 </form>
 <br>
 <p>Om första gången, skriv in dina uppgifter och tryck registrera. Annars skriv in dina uppgifter och tryck logga in.</p>
@@ -141,7 +141,10 @@ session_start();
 <p>Vinnare år för år (poängräkningen har skiljt sig vissa år så det är inte jämförbara)</p>
 <table class="table">
   <tbody>
-	<tr>
+  	<tr>
+		  <td>2020</td><td>Martin Samuelsson</td><td>77 poäng</td>
+		</tr>
+  	<tr>
 		  <td>2019</td><td>Johan Lindström</td><td>60 poäng</td>
 		</tr>
 	  <tr>
@@ -187,7 +190,7 @@ if( !empty($_SESSION["first_name"]) ) {
 }
 ?>
 <form action="" method="post">
-<button class="btn btn-default" type="submit" name="action" value="logout">Logga ut</button>
+<button class="btn btn-secondary" type="submit" name="action" value="logout">Logga ut</button>
 </form>
 </p>
 </div>
@@ -199,14 +202,34 @@ if( !empty($_SESSION["first_name"]) ) {
 <!-- ======================================================== -->
 <div class="container" <?php if( empty($_SESSION["first_name"]) ) {echo "hidden";} ?>>
 
+<!-- <p style="color:red;">OBSERVERA: Eftersom SVT inte presenterar plats nummer sex och sju längre så blir den helt färdiga
+räkningen inte klar förrän plats sex och sju redovisats på Wikipedia.</p> -->
+
+<!-- <p style="color:red;">Viktigt: Läs detta! Eftersom vinnare av duellerna i andra chansen redovisas direkt efter duellen så stängs tippningen
+redan innan resultatet av första duellen redovisats. Du kan alltså inte se duellerna och sen tippa utan du måste tippa i förväg.</p> -->
+
 <form action="" method="post">
-<select name="subcontest">
-<option value="none" selected>Välj Deltävling/Final</option>
+	<div class="dropdown">
+	<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		<?php if(!isset($_SESSION["current_sub_contest"])) {
+			echo "Välj deltävling";
+		}else {
+			echo $_SESSION["current_sub_contest"];
+		}
+			 ?>
+	</button>
+	<div class="dropdown-menu" aria-labelledby="dropdownMenu2">
 <?php
 	$arr = $melloDb->get_sub_contests();
 	for ($i = 0; $i < count($arr); $i++) {
 		if( $arr[$i] != "Final_2015" &&
 			$arr[$i] != "final_2016" &&
+			$arr[$i] != "deltavling_1_2019" &&
+			$arr[$i] != "deltavling_2_2019" &&
+			$arr[$i] != "deltavling_3_2019" &&
+			$arr[$i] != "deltavling_4_2019" &&
+			$arr[$i] != "andra_chansen_2019" &&
+			$arr[$i] != "final_2019"		&&
 			$arr[$i] != "deltavling_1_2018" &&
 			$arr[$i] != "deltavling_2_2018" &&
 			$arr[$i] != "deltavling_3_2018" &&
@@ -219,19 +242,14 @@ if( !empty($_SESSION["first_name"]) ) {
 			$arr[$i] != "deltavling_4_2017" &&
 			$arr[$i] != "eurovision_2016" &&
 			$arr[$i] != "andra_chansen_2017" &&
-			$arr[$i] != "final_2017"							
+			$arr[$i] != "final_2017"
 				) {
-			if( $arr[$i] == $_SESSION["current_sub_contest"] ) {
-				echo "<option value=\"$arr[$i]\" selected>$arr[$i]</option>";
-			}
-			else {
-				echo "<option value=\"$arr[$i]\">$arr[$i]</option>";
-			}
-		}
+						echo '<button class="dropdown-item" type="submit" name="action" value="set_sub_contest=' . $arr[$i] . '">' . $arr[$i] . '</button>';
+		          }
 	}
 ?>
-</select>
-<button class="btn btn-default" type="submit" name="action" value="set_sub_contest">Delta</button>
+	</div>
+	</div>
 </form>
 
 
@@ -262,6 +280,11 @@ if( !empty($_SESSION["first_name"]) ) {
 <script>
 $(document).ready(function () {
 
+	// First change the width of the banner image
+	var w = $(window).width();
+	document.getElementById('img_mellodrama').style.width=Math.min(w-400,700) +'px';
+
+	// Then control the lock
 	var is_locked = "1";
 
 	function check_lock() {
@@ -281,7 +304,7 @@ $(document).ready(function () {
 	check_lock();
 	setInterval(function(){ check_lock(); }, 30000); // Check every thirty seconds. 
 
-	
+	// Then control the sortable
     $('#sortable').sortable({
         axis: 'y',
         stop: function (event, ui) {
@@ -318,7 +341,7 @@ $(document).ready(function () {
 				echo "<li class=\"list-group-item\">Direkt<br>---</li>";				
 			}
 			elseif( $count_system == "deltavling" AND ($i == 3 OR $i == 4) ) {
-				echo "<li class=\"list-group-item\">2:a chansen<br>---</li>";
+				echo "<li class=\"list-group-item\">2:a ch<br>---</li>";
 			}
 			elseif( $count_system == "andra_chansen" AND ($i >= 1 AND $i <= 4) ) {
 				echo "<li class=\"list-group-item\">Till final<br>---</li>";
@@ -621,7 +644,7 @@ if( !empty($_SESSION["current_sub_contest"]) AND $_SESSION["current_sub_contest"
 </tbody>
 </table>
 <form action="" method="post">
-<button class="btn btn-default" type="submit" name="action" value="update">Uppdatera</button>
+<button class="btn btn-secondary" type="submit" name="action" value="update">Uppdatera</button>
 </form>
 <p>Dina gissningar uppdateras automatiskt när du drar och släpper men den här tippningstabellen uppdateras inte automatiskt. Så tryck uppdatera när röstningen på TV är avslutad.</p>
 
@@ -633,12 +656,12 @@ if( !empty($_SESSION["current_sub_contest"]) AND $_SESSION["current_sub_contest"
 if( !empty($_SESSION["current_sub_contest"]) AND $_SESSION["current_sub_contest"] != "none") {
 	
 	$arrParts = array(
-			"final_2019",
-			"andra_chansen_2019",
-			"deltavling_1_2019",
-      "deltavling_2_2019",
-			"deltavling_3_2019",
-			"deltavling_4_2019");
+			"final_2020",
+			"andra_chansen_2020",
+			"deltavling_1_2020",
+      "deltavling_2_2020",
+			"deltavling_3_2020",
+			"deltavling_4_2020");
 
 $arrCompeditors = array();
 	foreach ($arrParts as $part) {

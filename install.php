@@ -28,13 +28,11 @@ function create_database() {
 	$conn->close();	
 }
 
-// Uncomment create_database() the first time you use this
-// script on a server.
-create_database();
+//create_database();
 $melloDb = new MelloDB();
 $melloDb->create_users_table();
 $melloDb->create_sub_contest_table();
 $melloDb->add_user("Ola", "Wistedt");
 $melloDb->add_user("Martin", "Samuelsson");
-$melloDb->add_user("Johan", "Lindstrï¿½m");
+$melloDb->add_user("Johan", "Lindström");
 ?>
