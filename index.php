@@ -224,6 +224,12 @@ redan innan resultatet av första duellen redovisats. Du kan alltså inte se due
 	for ($i = 0; $i < count($arr); $i++) {
 		if( $arr[$i] != "Final_2015" &&
 			$arr[$i] != "final_2016" &&
+			$arr[$i] != "deltavling_1_2020" &&
+			$arr[$i] != "deltavling_2_2020" &&
+			$arr[$i] != "deltavling_3_2020" &&
+			$arr[$i] != "deltavling_4_2020" &&
+			$arr[$i] != "andra_chansen_2020" &&
+			$arr[$i] != "final_2020"		&&
 			$arr[$i] != "deltavling_1_2019" &&
 			$arr[$i] != "deltavling_2_2019" &&
 			$arr[$i] != "deltavling_3_2019" &&
@@ -611,7 +617,7 @@ if( !empty($_SESSION["current_sub_contest"]) AND $_SESSION["current_sub_contest"
 		echo "<p>Rätt placering ger 3 poäng, en placering ifrån ger 2 poäng, två placeringar ifrån ger 1 poäng. 2 bonuspoäng för rätt förstaplacering. Max poäng är 80.</p>";			
 	}
 	elseif ($count_system == "deltavling") {
-		echo "<p>Rätt placering ger 2 poäng, en placering ifrån ger 1 poäng. 1 bonuspoäng för rätt direkt till final. Max poäng är 16.</p>";
+		echo "<p>Rätt placering ger 2 poäng, en placering ifrån ger 1 poäng. 1 bonuspoäng för rätt direkt till final. Max poäng är 16. Då SVT inte längre presenterar 6'an och 7'an så tar det ett tag innan resultatet för dem kommer.</p>";
 	}
 	elseif ($count_system == "andra_chansen") {
 		echo "<p>Rätt gissning till final ger 2 poäng. Max poäng är 8.</p><p>Observera!! Förmodligen kommer SVT att redovisa resultaten duell för duell. Pga detta finns det inget bra sätt att låsa tippningen på. För att lösa detta på bästa sätt kommer låsningen att ske redan efter första duellen, så se till att ha tippat klart vid det laget.</p>";
@@ -656,12 +662,12 @@ if( !empty($_SESSION["current_sub_contest"]) AND $_SESSION["current_sub_contest"
 if( !empty($_SESSION["current_sub_contest"]) AND $_SESSION["current_sub_contest"] != "none") {
 	
 	$arrParts = array(
-			"final_2020",
-			"andra_chansen_2020",
-			"deltavling_1_2020",
-      "deltavling_2_2020",
-			"deltavling_3_2020",
-			"deltavling_4_2020");
+			"final_2021",
+			"andra_chansen_2021",
+			"deltavling_1_2021",
+            "deltavling_2_2021",
+			"deltavling_3_2021",
+			"deltavling_4_2021");
 
 $arrCompeditors = array();
 	foreach ($arrParts as $part) {

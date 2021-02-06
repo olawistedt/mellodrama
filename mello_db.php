@@ -5,10 +5,10 @@ $username = "witech_se";
 $password = "34H26SzT";
 $dbname = "witech_se";
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "melloDB1";
+//$servername = "localhost";
+//$username = "root";
+//$password = "";
+//$dbname = "melloDB1";
 
 class MelloDB {
 
