@@ -141,39 +141,42 @@ session_start();
 <p>Vinnare år för år (poängräkningen har skiljt sig vissa år så det är inte jämförbara)</p>
 <table class="table">
   <tbody>
-  	<tr>
-		  <td>2020</td><td>Martin Samuelsson</td><td>77 poäng</td>
-		</tr>
-  	<tr>
-		  <td>2019</td><td>Johan Lindström</td><td>60 poäng</td>
-		</tr>
-	  <tr>
-  		<td>2018</td><td>Martin Samuelsson</td><td>70 poäng</td>
-		</tr>
-	  <tr>
-		  <td>2017</td><td>Lars Nyström</td><td>61 poäng</td>
-		</tr>
-	  <tr>
-		  <td>2016</td><td>Ewa Pettersson</td><td>63 poäng</td>
-		</tr>
-	  <tr>
-		  <td>2015</td><td>Lars Nyström</td><td>55 poäng</td>
-		</tr>		
-	  <tr>
-		  <td>2014</td><td>Sandra Lindvall</td><td>59 poäng</td>
-		</tr>		
-	  <tr>
-		  <td>2014</td><td>Sandra Lindvall</td><td>68 poäng</td>
-		</tr>		
-		<tr>
-		  <td>2012</td><td>Johan Lindström</td><td>57 poäng</td>
-		</tr>
-	  <tr>
-		  <td>2011</td><td>Sandra Lindvall</td><td>50 poäng</td>
-		</tr>		
-	  <tr>
-			<td>2010</td><td>Martin Samuelsson</td><td>44 poäng</td></b>
-		</tr>
+    <tr>
+      <td>2021</td><td>Martin Samuelsson</td><td>63 poäng</td>
+    </tr>
+    <tr>
+      <td>2020</td><td>Martin Samuelsson</td><td>77 poäng</td>
+    </tr>
+    <tr>
+      <td>2019</td><td>Johan Lindström</td><td>60 poäng</td>
+    </tr>
+    <tr>
+      <td>2018</td><td>Martin Samuelsson</td><td>70 poäng</td>
+    </tr>
+    <tr>
+      <td>2017</td><td>Lars Nyström</td><td>61 poäng</td>
+    </tr>
+    <tr>
+      <td>2016</td><td>Ewa Pettersson</td><td>63 poäng</td>
+    </tr>
+    <tr>
+      <td>2015</td><td>Lars Nyström</td><td>55 poäng</td>
+    </tr>		
+    <tr>
+      <td>2014</td><td>Sandra Lindvall</td><td>59 poäng</td>
+    </tr>		
+    <tr>
+      <td>2014</td><td>Sandra Lindvall</td><td>68 poäng</td>
+    </tr>		
+    <tr>
+      <td>2012</td><td>Johan Lindström</td><td>57 poäng</td>
+    </tr>
+    <tr>
+      <td>2011</td><td>Sandra Lindvall</td><td>50 poäng</td>
+    </tr>		
+    <tr>
+      <td>2010</td><td>Martin Samuelsson</td><td>44 poäng</td>
+    </tr>
 </table>
 
 </div>
@@ -335,7 +338,10 @@ $(document).ready(function () {
 </script>
 
 <p style="color:red;" id="open_or_closed"></p>
-<p>Du kan ändra din tippning fram till strax innan resultaten redovisas på tv.</p> 
+
+<p>Du kan ändra din tippning fram till strax innan resultaten redovisas på tv.</p>
+<!-- <p style="color:red;">För andra chansen läs noga nedan.</p> -->
+
 <table class="table">
 <td>
 <ul class="list-group">
@@ -620,7 +626,7 @@ if( !empty($_SESSION["current_sub_contest"]) AND $_SESSION["current_sub_contest"
 		echo "<p>Rätt placering ger 2 poäng, en placering ifrån ger 1 poäng. 1 bonuspoäng för rätt direkt till final. Max poäng är 16. Då SVT inte längre presenterar 6'an och 7'an så tar det ett tag innan resultatet för dem kommer.</p>";
 	}
 	elseif ($count_system == "andra_chansen") {
-		echo "<p>Rätt gissning till final ger 2 poäng. Max poäng är 8.</p><p>Observera!! Förmodligen kommer SVT att redovisa resultaten duell för duell. Pga detta finns det inget bra sätt att låsa tippningen på. För att lösa detta på bästa sätt kommer låsningen att ske redan efter första duellen, så se till att ha tippat klart vid det laget.</p>";
+		echo "<p>Rätt gissning till final ger 2 poäng. Max poäng är 8.</p><p style=\"color:red;\">Observera!! Kanske kommer SVT att redovisa resultaten duell för duell. Om de gör det finns det inget bra sätt att låsa tippningen på. För att lösa detta på bästa sätt kommer låsningen att ske så fort första resultatet redovisas. Det kan alltså ske redan efter första duellen. Så se till att ha tippat klart vid det laget.</p>";
 	}
 }
 ?>
