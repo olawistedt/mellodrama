@@ -234,7 +234,7 @@ redan innan resultatet av första duellen redovisats. Du kan alltså inte se due
 			$arr[$i] != "deltavling_2_2022" &&
 			$arr[$i] != "deltavling_3_2022" &&
 			$arr[$i] != "deltavling_4_2022" &&
-			$arr[$i] != "andra_chansen_2022" &&
+			$arr[$i] != "semifinal_2022" &&
 			$arr[$i] != "final_2022"		&&
 			$arr[$i] != "deltavling_1_2021" &&
 			$arr[$i] != "deltavling_2_2021" &&
