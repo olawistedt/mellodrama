@@ -230,6 +230,12 @@ redan innan resultatet av första duellen redovisats. Du kan alltså inte se due
 	for ($i = 0; $i < count($arr); $i++) {
 		if( $arr[$i] != "Final_2015" &&
 			$arr[$i] != "final_2016" &&
+			$arr[$i] != "deltavling_1_2022" &&
+			$arr[$i] != "deltavling_2_2022" &&
+			$arr[$i] != "deltavling_3_2022" &&
+			$arr[$i] != "deltavling_4_2022" &&
+			$arr[$i] != "andra_chansen_2022" &&
+			$arr[$i] != "final_2022"		&&
 			$arr[$i] != "deltavling_1_2021" &&
 			$arr[$i] != "deltavling_2_2021" &&
 			$arr[$i] != "deltavling_3_2021" &&
@@ -358,12 +364,6 @@ $(document).ready(function () {
     if( !empty($_SESSION["current_sub_contest"]) AND $_SESSION["current_sub_contest"] != "none") {
     	$count_system = $melloDb->get_count_system($_SESSION["current_sub_contest"]);
 		for ($i = 1; $i <= count($melloDb->get_melodies($_SESSION["current_sub_contest"])); $i++) {
-			// if( $count_system == "deltavling" AND ($i == 1 OR $i == 2) ) {
-			// 	echo "<li class=\"list-group-item\">Direkt<br>---</li>";				
-			// }
-			// elseif( $count_system == "deltavling" AND ($i == 3 OR $i == 4) ) {
-			// 	echo "<li class=\"list-group-item\">2:a ch<br>---</li>";
-			// }
 			if( $count_system == "andra_chansen" AND ($i >= 1 AND $i <= 4) ) {
 				echo "<li class=\"list-group-item\">Till final<br>---</li>";
 			}
@@ -479,93 +479,8 @@ $(document).ready(function () {
 		return $sum;
 	}
 
-	// Count result with the deltavling count system
+	// Count result with the deltävlig count system
 	function count_result_deltavling_system($melloDb, $sub_contest, $user_id) {
-		$sum = 0;
-		// Loop results
-	
-		$arrMelodies = $melloDb->get_melodies($sub_contest);
-		$guesses = $melloDb->get_guesses_for_id($sub_contest, $user_id);
-		if($guesses == 0) {
-			return 0;
-		}
-		array_shift($guesses); // First element is id, throw it!
-	
-		$i = 1;
-		foreach ($arrMelodies as $melody) {
-			$correct_result = $melody[3];
-			$my_guess = array_search($i, $guesses) + 1; // Find melody guess in guesses
-			
-			if ( $my_guess == 1 AND $correct_result == 1) {
-				$sum += 3;
-			}
-			elseif ( $my_guess == 2 AND $correct_result == 1) {
-				$sum += 3;
-			}
-			elseif ( $my_guess == 2 AND $correct_result == 2) {
-				$sum += 1;
-			}
-			elseif ( $my_guess == 1 AND $correct_result == 2) {
-				$sum += 1;
-			}
-				
-			elseif ( $my_guess == 1 AND $correct_result == 3) {
-				$sum += 1;
-			}
-			elseif ( $my_guess == 1 AND $correct_result == 4) {
-				$sum += 1;
-			}
-			elseif ( $my_guess == 2 AND $correct_result == 3) {
-				$sum += 1;
-			}
-			elseif ( $my_guess == 2 AND $correct_result == 4) {
-				$sum += 1;
-			}
-				
-			// Second chance
-			elseif ( $my_guess == 3 AND $correct_result == 1 ) {
-				$sum += 1;
-			}
-			elseif ( $my_guess == 4 AND $correct_result == 1 ) {
-				$sum += 1;
-			}
-			elseif ( $my_guess == 3 AND $correct_result == 5 ) {
-				$sum += 1;
-			}
-			elseif ( $my_guess == 4 AND $correct_result == 5 ) {
-				$sum += 1;
-			}
-			elseif ( $my_guess == 3 AND $correct_result == 2 ) {
-				$sum += 2;
-			}
-			elseif ( $my_guess == 4 AND $correct_result == 2 ) {
-				$sum += 2;
-			}
-				
-			// Place 5
-			elseif ( $my_guess == 5 AND $correct_result == 2 ) {
-				$sum += 1;
-			}
-			
-			// General cases
-			elseif ($my_guess == $correct_result - 1) {
-				$sum += 1;
-			}
-			elseif ($my_guess == $correct_result + 1 AND $my_guess != 1) {
-				$sum += 1;
-			}
-			elseif($my_guess == $correct_result)
-			{
-				$sum += 2;
-			}
-				
-			$i++;
-		}
-		return $sum;
-	}
-
-	// Count result with the deltävlig 2022 count system
-	function count_result_deltavling_2022_system($melloDb, $sub_contest, $user_id) {
 		$sum = 0;
 		// Loop results
 		
@@ -644,11 +559,8 @@ $(document).ready(function () {
 		elseif ($count_system == "eurovision") {
 			$sum = count_result_eurovision_system($melloDb, $sub_contest, $user_id);
 		}
-//		elseif ($count_system == "deltavling") {
-//			$sum = count_result_deltavling_system($melloDb, $sub_contest, $user_id);
-//		}
 		elseif ($count_system == "deltavling") {
-			$sum = count_result_deltavling_2022_system($melloDb, $sub_contest, $user_id);
+			$sum = count_result_deltavling_system($melloDb, $sub_contest, $user_id);
 		}
 		elseif ($count_system == "andra_chansen") {
 			$sum = count_result_andra_chansen_system($melloDb, $sub_contest, $user_id);
@@ -669,9 +581,6 @@ if( !empty($_SESSION["current_sub_contest"]) AND $_SESSION["current_sub_contest"
 	elseif ($count_system == "eurovision") {
 		echo "<p>Rätt placering ger 3 poäng, en placering ifrån ger 2 poäng, två placeringar ifrån ger 1 poäng. 2 bonuspoäng för rätt förstaplacering. Max poäng är 80.</p>";			
 	}
-//	elseif ($count_system == "deltavling") {
-//		echo "<p>Rätt placering ger 2 poäng, en placering ifrån ger 1 poäng. 1 bonuspoäng för rätt direkt till final. Max poäng är 16. Då SVT inte längre presenterar 6'an och 7'an så tar det ett tag innan resultatet för dem kommer.</p>";
-//	}
 	elseif ($count_system == "deltavling") {
 		echo "<p>Rätt placering ger 2 poäng, en placering ifrån ger 1 poäng. 1 bonuspoäng för att pricka in ettan. Max poäng är 15. Observera att från 2022 så är det exakta placeringar som gäller.</p>";
 	}
@@ -718,12 +627,12 @@ if( !empty($_SESSION["current_sub_contest"]) AND $_SESSION["current_sub_contest"
 if( !empty($_SESSION["current_sub_contest"]) AND $_SESSION["current_sub_contest"] != "none") {
 	
 	$arrParts = array(
-			"final_2022",
-			"semifinal_2022",
-			"deltavling_1_2022",
-      "deltavling_2_2022",
-			"deltavling_3_2022",
-			"deltavling_4_2022");
+			"final_2023",
+			"andra_chansen_2023",
+			"deltavling_1_2023",
+	        "deltavling_2_2023",
+			"deltavling_3_2023",
+			"deltavling_4_2023");
 
 $arrCompeditors = array();
 	foreach ($arrParts as $part) {
