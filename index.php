@@ -142,6 +142,9 @@ session_start();
 <table class="table">
   <tbody>
     <tr>
+      <td>2022</td><td>Martin Samuelsson</td><td>58 poäng</td>
+    </tr>
+    <tr>
       <td>2021</td><td>Martin Samuelsson</td><td>63 poäng</td>
     </tr>
     <tr>
