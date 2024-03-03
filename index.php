@@ -364,9 +364,11 @@ $(document).ready(function () {
 <p style="color:red;" id="open_or_closed"></p>
 
 <p>Du kan ändra din tippning fram till strax innan resultaten redovisas på tv.</p>
+<!--
 <p style="color:blue;">För resultat gällande deltävling 3 (17 februari) så gick det
   väldigt fort när svt tog bort resultattabellen. Jag hade rättat fel och bytt plats
   på Klaudi och Gunilla ett tag. Det är fixat nu. Gunilla kom 4:a och inte 3:a.</p>
+-->
 <!-- <p style="color:red;">För andra chansen läs noga nedan.</p> -->
 
 <table class="table">
