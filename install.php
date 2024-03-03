@@ -28,11 +28,16 @@ function create_database() {
 	$conn->close();	
 }
 
-//create_database();
-$melloDb = new MelloDB();
-$melloDb->create_users_table();
-$melloDb->create_sub_contest_table();
-$melloDb->add_user("Ola", "Wistedt");
-$melloDb->add_user("Martin", "Samuelsson");
-$melloDb->add_user("Johan", "Lindström");
+//
+// NOTE:
+// We don't want to do this. Because we already have the database
+// and a lot of history in it.
+//
+// //create_database();
+// $melloDb = new MelloDB();
+// $melloDb->create_users_table();
+// $melloDb->create_sub_contest_table();
+// $melloDb->add_user("Ola", "Wistedt");
+// $melloDb->add_user("Martin", "Samuelsson");
+// $melloDb->add_user("Johan", "Lindstrï¿½m");
 ?>

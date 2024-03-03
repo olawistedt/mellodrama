@@ -141,6 +141,9 @@ session_start();
 <p>Vinnare år för år (poängräkningen har skiljt sig vissa år så det är inte jämförbara)</p>
 <table class="table">
   <tbody>
+  <tr>
+      <td>2023</td><td>Lars-Erik Elebjörk</td><td>60 poäng</td>
+    </tr>
     <tr>
       <td>2022</td><td>Martin Samuelsson</td><td>58 poäng</td>
     </tr>
@@ -230,6 +233,12 @@ redan innan resultatet av första duellen redovisats. Du kan alltså inte se due
 	for ($i = 0; $i < count($arr); $i++) {
 		if( $arr[$i] != "Final_2015" &&
 			$arr[$i] != "final_2016" &&
+			$arr[$i] != "deltavling_1_2023" &&
+			$arr[$i] != "deltavling_2_2023" &&
+			$arr[$i] != "deltavling_3_2023" &&
+			$arr[$i] != "deltavling_4_2023" &&
+			$arr[$i] != "andra_chansen_2023" &&
+			$arr[$i] != "final_2023"		&&
 			$arr[$i] != "deltavling_1_2022" &&
 			$arr[$i] != "deltavling_2_2022" &&
 			$arr[$i] != "deltavling_3_2022" &&
@@ -355,6 +364,9 @@ $(document).ready(function () {
 <p style="color:red;" id="open_or_closed"></p>
 
 <p>Du kan ändra din tippning fram till strax innan resultaten redovisas på tv.</p>
+<p style="color:blue;">För resultat gällande deltävling 3 (17 februari) så gick det
+  väldigt fort när svt tog bort resultattabellen. Jag hade rättat fel och bytt plats
+  på Klaudi och Gunilla ett tag. Det är fixat nu. Gunilla kom 4:a och inte 3:a.</p>
 <!-- <p style="color:red;">För andra chansen läs noga nedan.</p> -->
 
 <table class="table">
@@ -582,10 +594,10 @@ if( !empty($_SESSION["current_sub_contest"]) AND $_SESSION["current_sub_contest"
 		echo "<p>Rätt placering ger 3 poäng, en placering ifrån ger 2 poäng, två placeringar ifrån ger 1 poäng. 2 bonuspoäng för rätt förstaplacering. Max poäng är 80.</p>";			
 	}
 	elseif ($count_system == "deltavling") {
-		echo "<p>Rätt placering ger 2 poäng, en placering ifrån ger 1 poäng. 1 bonuspoäng för att pricka in ettan. Max poäng är 15. Observera att från 2022 så är det exakta placeringar som gäller.</p>";
+		echo "<p>Rätt placering ger 2 poäng, en placering ifrån ger 1 poäng. 1 bonuspoäng för att pricka in ettan. Max poäng är 13. Observera att från 2022 så är det exakta placeringar som gäller.</p>";
 	}
 	elseif ($count_system == "andra_chansen") {
-		echo "<p>Rätt gissning till final ger 2 poäng. Max poäng är 8.</p><p style=\"color:red;\">Observera!! Kanske kommer SVT att redovisa resultaten duell för duell. Om de gör det finns det inget bra sätt att låsa tippningen på. För att lösa detta på bästa sätt kommer låsningen att ske så fort första resultatet redovisas. Det kan alltså ske redan efter första duellen. Så se till att ha tippat klart vid det laget.</p>";
+		echo "<p>Rätt gissning till final ger 2 poäng. Max poäng är 8.</p>";
 	}
 }
 ?>
@@ -626,13 +638,16 @@ if( !empty($_SESSION["current_sub_contest"]) AND $_SESSION["current_sub_contest"
 <?php
 if( !empty($_SESSION["current_sub_contest"]) AND $_SESSION["current_sub_contest"] != "none") {
 	
+  // The maraton table
 	$arrParts = array(
-			"final_2023",
-			"andra_chansen_2023",
-			"deltavling_1_2023",
-	        "deltavling_2_2023",
-			"deltavling_3_2023",
-			"deltavling_4_2023");
+			"final_2024",
+//			"andra_chansen_2023",
+			"deltavling_1_2024",
+      "deltavling_2_2024",
+			"deltavling_3_2024",
+			"deltavling_4_2024",
+      "deltavling_5_2024"
+    );
 
 $arrCompeditors = array();
 	foreach ($arrParts as $part) {

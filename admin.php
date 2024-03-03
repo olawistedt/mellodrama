@@ -134,7 +134,7 @@ Deltävling:
 </select>
 <button type="submit" name="action" value="set_sub_contest">Välj deltävling</button>
 </form>
-<p>I delfinalerna mata in siffran 1 för de som gick vidare direkt till finalen. Mata in siffran 2 för de som gick till andra chansen. Eller om tävlingen är andra chansen mata in 1 för de som gick till final och mata in 2 för de som inte gick vidare. I finalen mata in siffran för placeringen helt enkelt</p>
+<p>I delfinalerna mata in placeringen för bidraget. Samma sak gäller i finalen.</p>
 <form action="admin.php" method="post">
 <?php
     if(!empty($_SESSION["current_sub_contest"])) {
