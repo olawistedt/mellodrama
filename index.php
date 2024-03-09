@@ -141,7 +141,10 @@ session_start();
 <p>Vinnare år för år (poängräkningen har skiljt sig vissa år så det är inte jämförbara)</p>
 <table class="table">
   <tbody>
-  <tr>
+    <tr>
+      <td>2024</td><td>Lars-Erik Elebjörk</td><td>57 poäng</td>
+    </tr>
+    <tr>
       <td>2023</td><td>Lars-Erik Elebjörk</td><td>60 poäng</td>
     </tr>
     <tr>
@@ -335,7 +338,7 @@ $(document).ready(function () {
 	}
 
 	check_lock();
-	setInterval(function(){ check_lock(); }, 30000); // Check every thirty seconds. 
+	setInterval(function(){ check_lock(); }, 10000); // Check every ten seconds.
 
 	// Then control the sortable
     $('#sortable').sortable({
