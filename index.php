@@ -142,7 +142,7 @@ session_start();
 <table class="table">
   <tbody>
     <tr>
-      <td>2024</td><td>Lars-Erik Elebjörk</td><td>57 poäng</td>
+      <td>2024</td><td>Thea Wistedt/Lars-Erik Elebjörk</td><td>54 poäng</td>
     </tr>
     <tr>
       <td>2023</td><td>Lars-Erik Elebjörk</td><td>60 poäng</td>
