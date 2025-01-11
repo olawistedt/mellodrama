@@ -231,58 +231,14 @@ redan innan resultatet av första duellen redovisats. Du kan alltså inte se due
 			 ?>
 	</button>
 	<div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-<?php
-	$arr = $melloDb->get_sub_contests();
-	for ($i = 0; $i < count($arr); $i++) {
-		if( $arr[$i] != "Final_2015" &&
-			$arr[$i] != "final_2016" &&
-			$arr[$i] != "deltavling_1_2023" &&
-			$arr[$i] != "deltavling_2_2023" &&
-			$arr[$i] != "deltavling_3_2023" &&
-			$arr[$i] != "deltavling_4_2023" &&
-			$arr[$i] != "andra_chansen_2023" &&
-			$arr[$i] != "final_2023"		&&
-			$arr[$i] != "deltavling_1_2022" &&
-			$arr[$i] != "deltavling_2_2022" &&
-			$arr[$i] != "deltavling_3_2022" &&
-			$arr[$i] != "deltavling_4_2022" &&
-			$arr[$i] != "semifinal_2022" &&
-			$arr[$i] != "final_2022"		&&
-			$arr[$i] != "deltavling_1_2021" &&
-			$arr[$i] != "deltavling_2_2021" &&
-			$arr[$i] != "deltavling_3_2021" &&
-			$arr[$i] != "deltavling_4_2021" &&
-			$arr[$i] != "andra_chansen_2021" &&
-			$arr[$i] != "final_2021"		&&
-			$arr[$i] != "deltavling_1_2020" &&
-			$arr[$i] != "deltavling_2_2020" &&
-			$arr[$i] != "deltavling_3_2020" &&
-			$arr[$i] != "deltavling_4_2020" &&
-			$arr[$i] != "andra_chansen_2020" &&
-			$arr[$i] != "final_2020"		&&
-			$arr[$i] != "deltavling_1_2019" &&
-			$arr[$i] != "deltavling_2_2019" &&
-			$arr[$i] != "deltavling_3_2019" &&
-			$arr[$i] != "deltavling_4_2019" &&
-			$arr[$i] != "andra_chansen_2019" &&
-			$arr[$i] != "final_2019"		&&
-			$arr[$i] != "deltavling_1_2018" &&
-			$arr[$i] != "deltavling_2_2018" &&
-			$arr[$i] != "deltavling_3_2018" &&
-			$arr[$i] != "deltavling_4_2018" &&
-			$arr[$i] != "andra_chansen_2018" &&
-			$arr[$i] != "final_2018"		&&
-			$arr[$i] != "deltavling_1_2017" &&
-			$arr[$i] != "deltavling_2_2017" &&
-			$arr[$i] != "deltavling_3_2017" &&
-			$arr[$i] != "deltavling_4_2017" &&
-			$arr[$i] != "eurovision_2016" &&
-			$arr[$i] != "andra_chansen_2017" &&
-			$arr[$i] != "final_2017"
-				) {
-						echo '<button class="dropdown-item" type="submit" name="action" value="set_sub_contest=' . $arr[$i] . '">' . $arr[$i] . '</button>';
-		          }
-	}
+	<?php
+    $arr = $melloDb->get_sub_contests();
+    for ($i = 0; $i < count($arr); $i++) {
+        // Check if the string contains "2025"
+        if (strpos($arr[$i], "2025") !== false) {
+            echo '<button class="dropdown-item" type="submit" name="action" value="set_sub_contest=' . $arr[$i] . '">' . $arr[$i] . '</button>';
+        }
+    }
 ?>
 	</div>
 	</div>
@@ -645,13 +601,12 @@ if( !empty($_SESSION["current_sub_contest"]) AND $_SESSION["current_sub_contest"
 	
   // The maraton table
 	$arrParts = array(
-			"final_2024",
-//			"andra_chansen_2023",
-			"deltavling_1_2024",
-      "deltavling_2_2024",
-			"deltavling_3_2024",
-			"deltavling_4_2024",
-      "deltavling_5_2024"
+			"final_2025",
+			"deltavling_1_2025",
+      "deltavling_2_2025",
+			"deltavling_3_2025",
+			"deltavling_4_2025",
+      "deltavling_5_2025"
     );
 
 $arrCompeditors = array();
