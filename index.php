@@ -544,6 +544,10 @@ $(document).ready(function () {
 		
 	?>
 
+<p>I år experimenterar vi med en social plattform för Mellodrama <a href="http://witechnology.se/mellodrama">http://witechnology.se/mellodrama</a>
+	gå gärna in och skapa en profil och engagera dig i forumet, skaffa vänner och chatta med dem. Nästa år
+	hoppas jag att vi kan integrera tävlingen i detta också</p>
+
 <h2>Tippningstabell</h2>
 <?php
 if( !empty($_SESSION["current_sub_contest"]) AND $_SESSION["current_sub_contest"] != "none") {
