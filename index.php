@@ -544,6 +544,10 @@ $(document).ready(function () {
 		
 	?>
 
+<p style="color: red; font-weight: bold;">Klantig som jag var glömde
+		jag bort att kolla att <a href="http://witechnology.se/mellodrama">http://witechnology.se/mellodrama</a> fungerade. Prova nu igen så ska det fungera. Om inte så säg till 😊
+	</p>
+
 <h2>Tippningstabell</h2>
 <?php
 if( !empty($_SESSION["current_sub_contest"]) AND $_SESSION["current_sub_contest"] != "none") {
